@@ -77,22 +77,22 @@ Output: ROBOT MISSING
 
 **Idea:**
 * The main resource is going to be `Game` - therefore we will have `api/games` endpoint
-* According to the problem there is exactly one robot per game which is the subresource of a certain game and as there is no collections we will use the `api/games/{gameId}/robot` endpoint
-* We expose actions on the robot according to the `Restful Objects Specification v1.1.0` paragraphs `20.3`, `20.4` 
+* According to the problem there is exactly one robot per game which is the subresource of a certain game and as there is no collections we will use the single rather than plural name for the endpoint: `api/games/{gameId}/robot` 
+* We expose the endpoint for actions on the robot according to the `Restful Objects Specification v1.1.0` paragraphs `20.3`, `20.4` 
 
 **Assumptions:**
-* Users do not share a single game but have a game per user or user might create several games
+* Users do not share a single game but can create a game per user or user might create several games
 * Robot might be placed on the board more than once during the game
-* Application explicitly notifies a consumer with a proper HTTP status and message when it cancels a move or a robot placement out of board boundaries
+* Application explicitly notifies a consumer with a proper HTTP status and message when it cancels a move or a robot placement because resulting position is out of board boundaries
 * Application should be stateless to be reliable and ready for horizontal scaling (and to be RESTful)
 * Therefore we need a persistence layer and as our logic does not require multi-row transactions we can use NoSQL DB 
-* The game will evolve so we need a good separation of the logic on the business logic layer (altough some of the services, e.g. `BoardService` have very basic functionality)
+* The game will evolve so we need a good separation of the logic on the business logic layer (although some of the services, e.g. `BoardService` have very basic functionality)
 * For the same reason let's decouple services and components of business layer with interfaces
 
 **Constraints:**
-* Embedded Mongo is used as a NoSQL DB and games are not persisted in between applicaion starts
-* As we have the very restricted set of tests we do not separate unit and integration tests with different profiles or modules
-* Synchronization is provided for the operations changing a robot state but for report we provide a weaker guarantee so under concurrent use in might report not the very latest state  
+* Embedded Mongo is used as a NoSQL DB and games are not persisted in between application starts
+* As we have the very limited set of tests we do not separate unit and integration tests with different profiles or modules
+* Synchronization is provided for the operations changing a robot state but for the report we provide a weaker guarantee so under concurrent use in might report not the very latest state  
 
 **Installation:**
 _Java and Apache Maven need to be installed in order to build the application._
